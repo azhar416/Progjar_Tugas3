@@ -1,5 +1,6 @@
 import socket
 import os
+import math
 
 BUFFER = 4096
 FORMAT = 'utf-8'
@@ -11,13 +12,17 @@ s.connect((SERVER, PORT))
 
 def file_send(path, socket):
     with open(path, 'rb') as file:
+        counter = 1
+        file_size = os.path.getsize(path)
+        loop = math.ceil(file_size / BUFFER)
         data = file.read(BUFFER)
-        while data:
+        while data and counter <= loop:
             socket.sendall(data)
             data = file.read(BUFFER)
+            counter += 1
     file.close()
 
-commands = ['USER ajar\r\n', 'PASS azhar416\r\n', 'TYPE A\r\n', 'PASV\r\n', 'STOR data.txt\r\n', 'QUIT\r\n']
+commands = ['USER ajar\r\n', 'PASS azhar416\r\n', 'TYPE A\r\n', 'PASV\r\n', 'STOR aaaa.mp4\r\n', 'QUIT\r\n']
 i = 1
 while True:
     try:
